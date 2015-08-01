@@ -12,7 +12,6 @@ var commands = []cli.Command{
 				Usage: "list records for a domain",
 				Action: func(c *cli.Context) {
 					domain := c.GlobalString("domain")
-					// list records domain
 					listRecordsDomain(domain)
 				},
 			},
