@@ -14,7 +14,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "domain, d",
-			Value: "example.com",
+			Value: "",
 			Usage: "select domain name",
 		},
 	}
