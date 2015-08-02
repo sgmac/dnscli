@@ -15,11 +15,14 @@ type Record struct {
 	Name         string
 	RecordType   string `json:"record_type"`
 	SystemRecord bool   `json:"system_record"`
+	TTL          int
 }
 
-type MultipleRecords struct {
-	Record Record
+func (r *Record) String() string {
+	return "Record"
 }
+
+type MultipleRecords []map[string]Record
 
 func listRecordsDomain(domain string) {
 	// Default domain is empty, use the value from the cli
@@ -41,12 +44,12 @@ func listRecordsDomain(domain string) {
 	}
 	defer response.Body.Close()
 
-	dataResponse := new([]MultipleRecords)
+	dataResponse := MultipleRecords{}
 	err = json.NewDecoder(response.Body).Decode(&dataResponse)
 	if err != nil {
 		log.Fatal("Decode-Body: ", err)
 	}
 
 	//TODO: Filter and process response
-	fmt.Println(dataResponse)
+	filterRecords(dataResponse)
 }
