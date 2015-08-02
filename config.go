@@ -21,10 +21,6 @@ type Config struct {
 	ApiURL string
 }
 
-type Record struct {
-	Record map[string]string
-}
-
 func createConfigPath() {
 	// Create the config directory
 	err := os.Mkdir(configPath, 0755)
