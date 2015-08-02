@@ -12,6 +12,7 @@ var (
 	homeUser   = os.Getenv("HOME")
 	configPath = path.Join(homeUser, ".dnscli")
 	configFile = path.Join(configPath, "dnsimple.json")
+	config     = readConfig()
 )
 
 type Config struct {
