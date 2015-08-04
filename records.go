@@ -80,3 +80,31 @@ func updateRecordDomain(domain, content, id string) {
 	}
 	validateRecordUpdate(resp)
 }
+
+func getRecordDomain(domain, record string) {
+	if domain != "" {
+		config.Domain = domain
+	} else if config.Domain == "" {
+		fmt.Println("Set a domain in your configuration file or provide one.")
+		os.Exit(1)
+	}
+	// TODO: Probably best to move URLs out, vars or in the config file.
+	url := config.ApiURL + config.Domain + "/records/" + record
+	fmt.Println("url:", url)
+	r := setHeaders("GET", url, nil)
+	httpClient := http.Client{}
+
+	response, err := httpClient.Do(r)
+	if err != nil {
+		log.Fatal("HTTPClient: ", err)
+	}
+	defer response.Body.Close()
+
+	dataResponse := map[string]Record{}
+	err = json.NewDecoder(response.Body).Decode(&dataResponse)
+	if err != nil {
+		log.Fatal("getRecordDomain-Decode: ", err)
+	}
+	stdoutHeader()
+	stdoutRecord(dataResponse["record"])
+}

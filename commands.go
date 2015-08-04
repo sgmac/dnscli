@@ -35,6 +35,21 @@ var commands = []cli.Command{
 					},
 				},
 			},
+			{
+				Name:  "get",
+				Usage: "get record for a domain",
+				Action: func(c *cli.Context) {
+					domain := c.GlobalString("domain")
+					id := c.String("id")
+					getRecordDomain(domain, id)
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "id, i",
+						Usage: "id record",
+					},
+				},
+			},
 		},
 	},
 }
