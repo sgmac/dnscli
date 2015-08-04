@@ -12,6 +12,10 @@ var (
 	leftPadding int = 22
 )
 
+type ValidationRecord struct {
+	Errors map[string][]string
+}
+
 func readConfig() *Config {
 	config := &Config{}
 	configData, err := ioutil.ReadFile(configFile)
@@ -37,8 +41,24 @@ func filterRecords(m MultipleRecords) {
 	}
 }
 
+// Update record provides two different JSON responses
+// for both error an success. Capture the error in case
+// the IP invalid. It does not validate the IP itself.
+func validateRecordUpdate(data []byte) {
+	validation := new(ValidationRecord)
+
+	err := json.Unmarshal(data, &validation)
+	if err != nil {
+		log.Fatal("json-unmarshal", err)
+	}
+
+	if len(validation.Errors["content"]) > 1 {
+		fmt.Println(validation.Errors["content"][1])
+	}
+}
+
 func stdoutHeader() {
-	headerFmt := fmt.Sprintf("%s%21s%22s%26s", "Type", "Name", "TTL", "Content")
+	headerFmt := fmt.Sprintf("%s%21s%22s%27s%21s", "Type", "Name", "TTL", "RecordID", "Content")
 	fmt.Println(headerFmt)
 }
 
@@ -46,9 +66,11 @@ func stdoutHeader() {
 func stdoutRecord(r Record) {
 	recordType := "%" + fmt.Sprintf("%d", (leftPadding-len(r.RecordType))+len(r.Name+config.Domain)) + "s"
 	recordName := "%" + fmt.Sprintf("%d", (leftPadding-len(r.Name+config.Domain))+len(strconv.Itoa(r.TTL))) + "d"
-	recordTTL := "%" + fmt.Sprintf("%d", (leftPadding-len(strconv.Itoa(r.TTL)))+len(r.Content)) + "s"
-	data := fmt.Sprint("%s", recordType, recordName, recordTTL)
+	recordTTL := "%" + fmt.Sprintf("%d", (leftPadding-len(strconv.Itoa(r.TTL)))+len(strconv.Itoa(r.ID))) + "d"
+	recordId := "%" + fmt.Sprintf("%d", (leftPadding-len(strconv.Itoa(r.ID)))+len(r.Content)) + "s"
+
+	data := fmt.Sprint("%s", recordType, recordName, recordTTL, recordId)
 	formatEnd := fmt.Sprintf("%s", data)
-	fmt.Printf(fmt.Sprintf(formatEnd, r.RecordType, r.Name+"."+config.Domain, r.TTL, r.Content))
+	fmt.Printf(fmt.Sprintf(formatEnd, r.RecordType, r.Name+"."+config.Domain, r.TTL, r.ID, r.Content))
 	fmt.Println("")
 }

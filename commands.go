@@ -15,6 +15,26 @@ var commands = []cli.Command{
 					listRecordsDomain(domain)
 				},
 			},
+			{
+				Name:  "update",
+				Usage: "update record for a domain",
+				Action: func(c *cli.Context) {
+					domain := c.GlobalString("domain")
+					id := c.String("id")
+					content := c.String("content")
+					updateRecordDomain(domain, content, id)
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "id, i",
+						Usage: "id record",
+					},
+					cli.StringFlag{
+						Name:  "content, c",
+						Usage: "update record value",
+					},
+				},
+			},
 		},
 	},
 }

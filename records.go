@@ -3,23 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type Record struct {
 	Content      string
-	DomainID     int64 `json:"domain_id"`
-	ID           int64
+	DomainID     int `json:"domain_id"`
+	ID           int
 	Name         string
 	RecordType   string `json:"record_type"`
 	SystemRecord bool   `json:"system_record"`
 	TTL          int
-}
-
-func (r *Record) String() string {
-	return "Record"
 }
 
 type MultipleRecords []map[string]Record
@@ -35,7 +33,7 @@ func listRecordsDomain(domain string) {
 
 	// Compose url and headers
 	url := config.ApiURL + config.Domain + "/records/"
-	r := setHeaders("GET", url)
+	r := setHeaders("GET", url, nil)
 	httpClient := http.Client{}
 
 	response, err := httpClient.Do(r)
@@ -50,6 +48,35 @@ func listRecordsDomain(domain string) {
 		log.Fatal("Decode-Body: ", err)
 	}
 
-	//TODO: Filter and process response
 	filterRecords(dataResponse)
+}
+
+func updateRecordDomain(domain, content, id string) {
+	if domain != "" {
+		config.Domain = domain
+	} else if config.Domain == "" {
+		fmt.Println("Set a domain in your configuration file or provide one.")
+		os.Exit(1)
+	}
+
+	updateContent := make(map[string]string)
+	updateContent["content"] = content
+	data, err := json.Marshal(updateContent)
+	d := strings.NewReader(string(data))
+
+	url := config.ApiURL + config.Domain + "/records/" + id
+	req := setHeaders("PUT", url, d)
+	httpClient := http.Client{}
+
+	response, err := httpClient.Do(req)
+	if err != nil {
+		log.Fatal("updateRecord-Do: ", err)
+	}
+	defer response.Body.Close()
+
+	resp, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal("updateRecord-ReadAll: ", err)
+	}
+	validateRecordUpdate(resp)
 }
