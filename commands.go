@@ -65,6 +65,31 @@ var commands = []cli.Command{
 					},
 				},
 			},
+			{
+				Name:  "add",
+				Usage: "create record for a domain",
+				Action: func(c *cli.Context) {
+					domain := c.GlobalString("domain")
+					recordType := c.String("type")
+					content := c.String("content")
+					name := c.String("name")
+					createRecordDomain(domain, name, content, recordType)
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "type, t",
+						Usage: "record type (i.e: A, NS, MX)",
+					},
+					cli.StringFlag{
+						Name:  "content, c",
+						Usage: "define record content",
+					},
+					cli.StringFlag{
+						Name:  "name, n",
+						Usage: "record name",
+					},
+				},
+			},
 		},
 	},
 }

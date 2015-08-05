@@ -137,3 +137,44 @@ func deleteRecordDomain(domain, id string) {
 		fmt.Println("", msg)
 	}
 }
+
+func createRecordDomain(domain, name, content, recordType string) {
+	if domain != "" {
+		config.Domain = domain
+	} else if config.Domain == "" {
+		fmt.Println("Set a domain in your configuration file or provide one.")
+		os.Exit(1)
+	}
+
+	re := make(map[string]Record)
+	record := Record{}
+	record.Content = content
+	record.RecordType = recordType
+	record.Name = name
+	re["record"] = record
+
+	dataJSON, err := json.Marshal(re)
+	data := strings.NewReader(string(dataJSON))
+	if err != nil {
+		log.Fatal("createRecordDomain-Marshal: ", err)
+	}
+
+	url := config.ApiURL + config.Domain + "/records/"
+	r := setHeaders("POST", url, data)
+	httpClient := http.Client{}
+
+	response, err := httpClient.Do(r)
+	if err != nil {
+		log.Fatal("HTTPClient: ", err)
+	}
+	defer response.Body.Close()
+
+	dataResponse := make(map[string]Record)
+	err = json.NewDecoder(response.Body).Decode(&dataResponse)
+	if err != nil {
+		log.Fatal("createRecordDomain-Decode: ", err)
+	}
+
+	stdoutHeader()
+	stdoutRecord(dataResponse["record"])
+}
