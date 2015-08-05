@@ -90,7 +90,6 @@ func getRecordDomain(domain, record string) {
 	}
 	// TODO: Probably best to move URLs out, vars or in the config file.
 	url := config.ApiURL + config.Domain + "/records/" + record
-	fmt.Println("url:", url)
 	r := setHeaders("GET", url, nil)
 	httpClient := http.Client{}
 
