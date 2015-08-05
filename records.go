@@ -99,7 +99,7 @@ func getRecordDomain(domain, record string) {
 	}
 	defer response.Body.Close()
 
-	dataResponse := map[string]Record{}
+	dataResponse := make(map[string]Record)
 	err = json.NewDecoder(response.Body).Decode(&dataResponse)
 	if err != nil {
 		log.Fatal("getRecordDomain-Decode: ", err)
