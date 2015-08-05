@@ -107,3 +107,33 @@ func getRecordDomain(domain, record string) {
 	stdoutHeader()
 	stdoutRecord(dataResponse["record"])
 }
+
+func deleteRecordDomain(domain, id string) {
+	if domain != "" {
+		config.Domain = domain
+	} else if config.Domain == "" {
+		fmt.Println("Set a domain in your configuration file or provide one.")
+		os.Exit(1)
+	}
+
+	url := config.ApiURL + config.Domain + "/records/" + id
+	r := setHeaders("DELETE", url, nil)
+	httpClient := http.Client{}
+
+	response, err := httpClient.Do(r)
+	if err != nil {
+		log.Fatal("HTTPClient: ", err)
+	}
+	defer response.Body.Close()
+
+	dataResponse := make(map[string]string)
+	err = json.NewDecoder(response.Body).Decode(&dataResponse)
+	if err != nil {
+		log.Fatal("deleteRecordDomain-Decode: ", err)
+	}
+
+	// In case the record ID does not exist
+	if msg, ok := dataResponse["message"]; ok {
+		fmt.Println("", msg)
+	}
+}

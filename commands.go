@@ -50,6 +50,21 @@ var commands = []cli.Command{
 					},
 				},
 			},
+			{
+				Name:  "delete",
+				Usage: "delete record for a domain",
+				Action: func(c *cli.Context) {
+					domain := c.GlobalString("domain")
+					id := c.String("id")
+					deleteRecordDomain(domain, id)
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "id, i",
+						Usage: "id record",
+					},
+				},
+			},
 		},
 	},
 }
