@@ -11,10 +11,10 @@ import (
 )
 
 type Record struct {
-	Content      string
-	DomainID     int `json:"domain_id"`
+	Content      string `json:"content"`
+	DomainID     int    `json:"domain_id"`
 	ID           int
-	Name         string
+	Name         string `json:"name"`
 	RecordType   string `json:"record_type"`
 	SystemRecord bool   `json:"system_record"`
 	TTL          int
