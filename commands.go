@@ -9,7 +9,7 @@ var commands = []cli.Command{
 		Subcommands: []cli.Command{
 			{
 				Name:  "list",
-				Usage: "list records for a domain",
+				Usage: "list records domain",
 				Action: func(c *cli.Context) {
 					domain := c.GlobalString("domain")
 					listRecordsDomain(domain)
@@ -17,11 +17,15 @@ var commands = []cli.Command{
 			},
 			{
 				Name:  "update",
-				Usage: "update record for a domain",
+				Usage: "update record",
 				Action: func(c *cli.Context) {
 					domain := c.GlobalString("domain")
 					id := c.String("id")
 					content := c.String("content")
+					if id == "" || content == "" {
+						cli.ShowSubcommandHelp(c)
+						return
+					}
 					updateRecordDomain(domain, content, id)
 				},
 				Flags: []cli.Flag{
@@ -31,7 +35,7 @@ var commands = []cli.Command{
 					},
 					cli.StringFlag{
 						Name:  "content, c",
-						Usage: "update record value",
+						Usage: "record value",
 					},
 				},
 			},
@@ -41,6 +45,10 @@ var commands = []cli.Command{
 				Action: func(c *cli.Context) {
 					domain := c.GlobalString("domain")
 					id := c.String("id")
+					if id == "" {
+						cli.ShowSubcommandHelp(c)
+						return
+					}
 					getRecordDomain(domain, id)
 				},
 				Flags: []cli.Flag{
@@ -52,10 +60,14 @@ var commands = []cli.Command{
 			},
 			{
 				Name:  "delete",
-				Usage: "delete record for a domain",
+				Usage: "delete record",
 				Action: func(c *cli.Context) {
 					domain := c.GlobalString("domain")
 					id := c.String("id")
+					if id == "" {
+						cli.ShowSubcommandHelp(c)
+						return
+					}
 					deleteRecordDomain(domain, id)
 				},
 				Flags: []cli.Flag{
@@ -73,6 +85,10 @@ var commands = []cli.Command{
 					recordType := c.String("type")
 					content := c.String("content")
 					name := c.String("name")
+					if content == "" || recordType == "" {
+						cli.ShowSubcommandHelp(c)
+						return
+					}
 					createRecordDomain(domain, name, content, recordType)
 				},
 				Flags: []cli.Flag{
@@ -82,7 +98,7 @@ var commands = []cli.Command{
 					},
 					cli.StringFlag{
 						Name:  "content, c",
-						Usage: "define record content",
+						Usage: "record content",
 					},
 					cli.StringFlag{
 						Name:  "name, n",
