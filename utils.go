@@ -74,3 +74,25 @@ func stdoutRecord(r Record) {
 	fmt.Printf(fmt.Sprintf(formatEnd, r.RecordType, r.Name+"."+config.Domain, r.TTL, r.ID, r.Content))
 	fmt.Println("")
 }
+
+func stdoutAutoRenew(a AutoRenew) {
+	lo := "false"
+	au := "false"
+	if a.Lockable {
+		lo = "true"
+	}
+	if a.AutoRenew {
+		au = "true"
+	}
+
+	headerFmt := fmt.Sprintf("%s%24s%23s", "Domain", "Lockable", "AutoRenew")
+	fmt.Println(headerFmt)
+
+	dom := "%" + fmt.Sprintf("%d", (leftPadding-len(a.Domain))+len(lo)) + "s"
+	lock := "%" + fmt.Sprintf("%d", (leftPadding-len(lo))+len(au)) + "s"
+	data := fmt.Sprint("%s", dom, lock)
+	formatEnd := fmt.Sprintf("%s", data)
+
+	fmt.Printf(fmt.Sprintf(formatEnd, a.Domain, lo, au))
+	fmt.Println("")
+}

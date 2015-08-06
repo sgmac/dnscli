@@ -108,4 +108,19 @@ var commands = []cli.Command{
 			},
 		},
 	},
+	{
+		Name:  "autorenewal",
+		Usage: "enable auto renewal",
+		Action: func(c *cli.Context) {
+			enabled := c.Bool("e")
+			domain := c.GlobalString("domain")
+			enableAutoRenewal(domain, enabled)
+		},
+		Flags: []cli.Flag{
+			cli.BoolFlag{
+				Name:  "e",
+				Usage: "record type (i.e: A, NS, MX)",
+			},
+		},
+	},
 }
