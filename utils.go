@@ -42,8 +42,8 @@ func filterRecords(m MultipleRecords) {
 }
 
 // Update record provides two different JSON responses
-// for both error an success. Capture the error in case
-// the IP invalid. It does not validate the IP itself.
+// for both error and success. Capture the error in case
+// the IP is invalid. It does not validate the IP itself.
 func validateRecordUpdate(data []byte) {
 	validation := new(ValidationRecord)
 
