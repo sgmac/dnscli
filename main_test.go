@@ -32,3 +32,17 @@ func TestCreateConfigPath(t *testing.T) {
 		t.Error("configuration path not found")
 	}
 }
+
+func TestSetHeaders(t *testing.T) {
+	config.ApiURL = "https://api.custom.com"
+	config.Domain = "example.com"
+	config.Token = "Token123"
+	config.Mail = "mail@example.com"
+
+	r := setHeaders("GET", "customurl", nil)
+	dnsToken := config.Mail + ":" + config.Token
+
+	if r.Header.Get("X-DNSimple-Token") != dnsToken {
+		t.Error("DNS Headers not properly set")
+	}
+}
