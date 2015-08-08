@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -26,6 +27,11 @@ func readConfig() *Config {
 	err = json.Unmarshal(configData, config)
 	if err != nil {
 		log.Fatal("readConfig-Unmarshal", err)
+	}
+
+	// Check ApiURL is properly terminated
+	if !strings.HasSuffix(config.ApiURL, "/") {
+		config.ApiURL = config.ApiURL + "/"
 	}
 	return config
 }
