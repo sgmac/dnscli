@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -15,6 +16,10 @@ var (
 
 type ValidationRecord struct {
 	Errors map[string][]string
+}
+
+type ErrorMessage struct {
+	Message string
 }
 
 func readConfig() *Config {
@@ -60,6 +65,7 @@ func validateRecordUpdate(data []byte) {
 
 	if len(validation.Errors["content"]) > 1 {
 		fmt.Println(validation.Errors["content"][1])
+		os.Exit(1)
 	}
 }
 
@@ -108,4 +114,15 @@ func isConfigEmpty(c Config) bool {
 		return true
 	}
 	return false
+}
+
+func isRecordDefined(data []byte) {
+	// The record is already create
+	validation := new(ErrorMessage)
+	json.Unmarshal(data, &validation)
+
+	if validation.Message != "" {
+		fmt.Println(validation.Message)
+		os.Exit(1)
+	}
 }

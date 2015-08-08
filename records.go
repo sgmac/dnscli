@@ -170,7 +170,13 @@ func createRecordDomain(domain, name, content, recordType string) {
 	defer response.Body.Close()
 
 	dataResponse := make(map[string]Record)
-	err = json.NewDecoder(response.Body).Decode(&dataResponse)
+	resp, err := ioutil.ReadAll(response.Body)
+
+	// JSON response differs for success, failure
+	// and record already defined.
+	validateRecordUpdate(resp)
+	isRecordDefined(resp)
+	err = json.NewDecoder(strings.NewReader(string(resp))).Decode(&dataResponse)
 	if err != nil {
 		log.Fatal("createRecordDomain-Decode: ", err)
 	}
