@@ -34,7 +34,7 @@ you need to update the information with your credentials.
 
 ### Getting started
 
-You can manage your records on a daily basis from the CLI, operations such as ```list, delete, create, update and get``` are fully supported.
+You can manage your records on a daily basis from the CLI, operations such as ```list, delete, create, update and get``` are fully supported. The first time you try to run it asks to configure your credentials. It will not work until you configure them.
 
 
 ```
