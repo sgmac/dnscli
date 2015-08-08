@@ -102,3 +102,10 @@ func stdoutAutoRenew(a AutoRenew) {
 	fmt.Printf(fmt.Sprintf(formatEnd, a.Domain, lo, au))
 	fmt.Println("")
 }
+
+func isConfigEmpty(c Config) bool {
+	if c.ApiURL == "" || c.Mail == "" || c.Token == "" {
+		return true
+	}
+	return false
+}

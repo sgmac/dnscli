@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/codegangsta/cli"
@@ -19,6 +20,11 @@ func main() {
 		},
 	}
 	app.Commands = commands
+	if isConfigEmpty(*config) {
+		fmt.Println("Verify your have the required parameters properly set.")
+		fmt.Println("Review ~/.dnscli/config.json")
+		os.Exit(1)
+	}
 	app.Run(os.Args)
 
 	if _, err := os.Stat(configFile); os.IsNotExist(err) {
