@@ -46,6 +46,5 @@ func enableAutoRenewal(domain string, enabled bool) {
 	if err != nil {
 		log.Fatal("enableAutoRenewal-Decode: ", err)
 	}
-	//fmt.Println(dataResponse)
 	stdoutAutoRenew(dataResponse["domain"])
 }
