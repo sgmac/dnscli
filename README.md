@@ -70,6 +70,14 @@ Domain                Lockable              AutoRenew
 example.com             true                  true
 ```
 
+#### Bash completion
+It has built-in bash completion thanks to [codegangsta/cli](https://github.com/codegangsta/cli), however you will need to source it from
+some place:
+
+```
+PROG=dnscli source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_autocomplete
+```
+
 #### TODO
 I just wanted something that works, some improvements :
 
