@@ -24,6 +24,10 @@ type ErrorMessage struct {
 
 func readConfig() *Config {
 	config := &Config{}
+	if _, err := os.Stat(configFile); os.IsNotExist(err) {
+		// Create the path and an empty configuration
+		createConfigPath()
+	}
 	configData, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		log.Fatal("readConfig-ReadFile", err)

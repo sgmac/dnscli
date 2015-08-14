@@ -26,9 +26,4 @@ func main() {
 		os.Exit(1)
 	}
 	app.Run(os.Args)
-
-	if _, err := os.Stat(configFile); os.IsNotExist(err) {
-		// Create the path and an empty configuration
-		createConfigPath()
-	}
 }
