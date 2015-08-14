@@ -11,6 +11,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "dnscli"
+	app.EnableBashCompletion = true
 	app.Usage = "DNSimple records from the CLI"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
