@@ -1,6 +1,10 @@
 package main
 
-import "github.com/codegangsta/cli"
+import (
+	"os"
+
+	"github.com/codegangsta/cli"
+)
 
 var commands = []cli.Command{
 	{
@@ -113,13 +117,24 @@ var commands = []cli.Command{
 		Usage: "enable auto renewal",
 		Action: func(c *cli.Context) {
 			enabled := c.Bool("e")
+			disabled := c.Bool("d")
+			if !enabled {
+				if !disabled {
+					cli.ShowSubcommandHelp(c)
+					os.Exit(1)
+				}
+			}
 			domain := c.GlobalString("domain")
 			enableAutoRenewal(domain, enabled)
 		},
 		Flags: []cli.Flag{
 			cli.BoolFlag{
 				Name:  "e",
-				Usage: "record type (i.e: A, NS, MX)",
+				Usage: "enable auto renewal",
+			},
+			cli.BoolFlag{
+				Name:  "d",
+				Usage: "disable auto renewal",
 			},
 		},
 	},
