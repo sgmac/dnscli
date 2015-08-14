@@ -14,6 +14,8 @@ var (
 	leftPadding int = 22
 )
 
+// Capture error updating a record
+// in case content (IP) is invalid.
 type ValidationRecord struct {
 	Errors map[string][]string
 }
