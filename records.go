@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Struct holding a single record response.
 type Record struct {
 	Content      string `json:"content"`
 	DomainID     int    `json:"domain_id"`
@@ -20,6 +21,7 @@ type Record struct {
 	TTL          int
 }
 
+// Listing records returns an slice of records.
 type MultipleRecords []map[string]Record
 
 func listRecordsDomain(domain string) {

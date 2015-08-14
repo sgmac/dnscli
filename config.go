@@ -15,6 +15,8 @@ var (
 	config     = readConfig()
 )
 
+// A Config struct keeps the credentials information
+// stored as a JSON document on `configFile`.
 type Config struct {
 	Token  string
 	Domain string
@@ -23,13 +25,13 @@ type Config struct {
 }
 
 func createConfigPath() {
-	// Create the config directory
+	// Create the config directory.
 	err := os.Mkdir(configPath, 0755)
 	if err != nil {
 		log.Fatal("pathConfig: ", err)
 	}
 
-	// Create an empty config file
+	// Create an empty config file.
 	c := Config{}
 
 	emptyConfig, err := json.Marshal(c)
