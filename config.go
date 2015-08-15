@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 )
 
 var (
@@ -28,7 +29,12 @@ func createConfigPath() {
 	// Create the config directory.
 	err := os.Mkdir(configPath, 0755)
 	if err != nil {
-		log.Fatal("pathConfig: ", err)
+		e := err.(*os.PathError)
+		if strings.Contains(e.Err.Error(), "file exists") {
+			// Ignore error if dir already exists.
+		} else {
+			log.Fatal("pathConfig: ", err)
+		}
 	}
 
 	// Create an empty config file.
