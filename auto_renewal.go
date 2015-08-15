@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 )
 
 type AutoRenew struct {
@@ -16,21 +14,17 @@ type AutoRenew struct {
 }
 
 func enableAutoRenewal(domain string, enabled bool) {
+	isDomainEmpty(domain)
+
 	var url string
 	var r *http.Request
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
 
 	// Enable/Disable auto renewal
 	if enabled {
-		url = config.ApiURL + config.Domain + "/auto_renewal"
+		url = config.ApiURL + "/domains/" + config.Domain + "/auto_renewal"
 		r = setHeaders("POST", url, nil)
 	} else {
-		url = config.ApiURL + config.Domain + "/auto_renewal"
+		url = config.ApiURL + "/domains/" + config.Domain + "/auto_renewal"
 		r = setHeaders("DELETE", url, nil)
 	}
 

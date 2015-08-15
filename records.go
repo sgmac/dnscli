@@ -6,8 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
+)
+
+var (
+	urlRecords = config.ApiURL + "/domains/" + config.Domain + "/records/"
 )
 
 // Struct holding a single record response.
@@ -21,21 +24,14 @@ type Record struct {
 	TTL          int
 }
 
-// Listing records returns an slice of records.
+// Listing records returns a slice of records.
 type MultipleRecords []map[string]Record
 
 func listRecordsDomain(domain string) {
-	// Default domain is empty, use the value from the cli
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
+	// If domain is empty, use the value from the cli.
+	isDomainEmpty(domain)
 
-	// Compose url and headers
-	url := config.ApiURL + config.Domain + "/records/"
-	r := setHeaders("GET", url, nil)
+	r := setHeaders("GET", urlRecords, nil)
 	httpClient := http.Client{}
 
 	response, err := httpClient.Do(r)
@@ -54,19 +50,14 @@ func listRecordsDomain(domain string) {
 }
 
 func updateRecordDomain(domain, content, id string) {
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
+	isDomainEmpty(domain)
 
 	updateContent := make(map[string]string)
 	updateContent["content"] = content
 	data, err := json.Marshal(updateContent)
 	d := strings.NewReader(string(data))
 
-	url := config.ApiURL + config.Domain + "/records/" + id
+	url := urlRecords + id
 	req := setHeaders("PUT", url, d)
 	httpClient := http.Client{}
 
@@ -83,15 +74,10 @@ func updateRecordDomain(domain, content, id string) {
 	validateRecordUpdate(resp)
 }
 
-func getRecordDomain(domain, record string) {
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
-	// TODO: Probably best to move URLs out, vars or in the config file.
-	url := config.ApiURL + config.Domain + "/records/" + record
+func getRecordDomain(domain, id string) {
+	isDomainEmpty(domain)
+
+	url := urlRecords + id
 	r := setHeaders("GET", url, nil)
 	httpClient := http.Client{}
 
@@ -111,14 +97,9 @@ func getRecordDomain(domain, record string) {
 }
 
 func deleteRecordDomain(domain, id string) {
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
+	isDomainEmpty(domain)
 
-	url := config.ApiURL + config.Domain + "/records/" + id
+	url := urlRecords + id
 	r := setHeaders("DELETE", url, nil)
 	httpClient := http.Client{}
 
@@ -141,12 +122,7 @@ func deleteRecordDomain(domain, id string) {
 }
 
 func createRecordDomain(domain, name, content, recordType string) {
-	if domain != "" {
-		config.Domain = domain
-	} else if config.Domain == "" {
-		fmt.Println("Set a domain in your configuration file or provide one.")
-		os.Exit(1)
-	}
+	isDomainEmpty(domain)
 
 	re := make(map[string]Record)
 	record := Record{}
@@ -161,8 +137,7 @@ func createRecordDomain(domain, name, content, recordType string) {
 		log.Fatal("createRecordDomain-Marshal: ", err)
 	}
 
-	url := config.ApiURL + config.Domain + "/records/"
-	r := setHeaders("POST", url, data)
+	r := setHeaders("POST", urlRecords, data)
 	httpClient := http.Client{}
 
 	response, err := httpClient.Do(r)

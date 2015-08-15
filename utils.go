@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/Sirupsen/logrus"
 )
 
 var (
@@ -129,6 +131,17 @@ func isRecordDefined(data []byte) {
 
 	if validation.Message != "" {
 		fmt.Println(validation.Message)
+		os.Exit(1)
+	}
+}
+
+func isDomainEmpty(domain string) {
+	if domain != "" {
+		config.Domain = domain
+		return
+	}
+	if config.Domain == "" {
+		logrus.Error("Set a domain in your configuration file or provide one.")
 		os.Exit(1)
 	}
 }
