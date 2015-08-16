@@ -9,10 +9,6 @@ import (
 	"strings"
 )
 
-var (
-	urlRecords = config.ApiURL + "/domains/" + config.Domain + "/records/"
-)
-
 // Struct holding a single record response.
 type Record struct {
 	Content      string `json:"content"`
@@ -30,6 +26,7 @@ type MultipleRecords []map[string]Record
 func listRecordsDomain(domain string) {
 	// If domain is empty, use the value from the cli.
 	isDomainEmpty(domain)
+	urlRecords := config.ApiURL + "/domains/" + config.Domain + "/records/"
 
 	r := setHeaders("GET", urlRecords, nil)
 	httpClient := http.Client{}
@@ -51,6 +48,7 @@ func listRecordsDomain(domain string) {
 
 func updateRecordDomain(domain, content, id string) {
 	isDomainEmpty(domain)
+	urlRecords := config.ApiURL + "/domains/" + config.Domain + "/records/"
 
 	updateContent := make(map[string]string)
 	updateContent["content"] = content
@@ -76,6 +74,7 @@ func updateRecordDomain(domain, content, id string) {
 
 func getRecordDomain(domain, id string) {
 	isDomainEmpty(domain)
+	urlRecords := config.ApiURL + "/domains/" + config.Domain + "/records/"
 
 	url := urlRecords + id
 	r := setHeaders("GET", url, nil)
@@ -98,6 +97,7 @@ func getRecordDomain(domain, id string) {
 
 func deleteRecordDomain(domain, id string) {
 	isDomainEmpty(domain)
+	urlRecords := config.ApiURL + "/domains/" + config.Domain + "/records/"
 
 	url := urlRecords + id
 	r := setHeaders("DELETE", url, nil)
@@ -123,6 +123,7 @@ func deleteRecordDomain(domain, id string) {
 
 func createRecordDomain(domain, name, content, recordType string) {
 	isDomainEmpty(domain)
+	urlRecords := config.ApiURL + "/domains/" + config.Domain + "/records/"
 
 	re := make(map[string]Record)
 	record := Record{}
