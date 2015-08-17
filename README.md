@@ -14,7 +14,7 @@ To install simply run:
 ```
 $ go get -u github.com/sgmac/dnscli
 ```
-The only dependency so far is [github.com/codegangsta/cli](https://github.com/codegangsta/cli)
+The only dependency so far is [github.com/codegangsta/cli](https://github.com/codegangsta/cli) and [github.com/Sirupsen/logrus](https://github.com/Sirupsen/logrus).
 
 Make sure you have properly set your GO environment before using the command. [See the install instructions](http://golang.org/doc/install.html).
 
@@ -23,9 +23,9 @@ Make sure you have properly set your GO environment before using the command. [S
 The default path for the configuration is located in ```$HOME/.dnscli/config.json```. The first time you run ```dnscli``` it creates an empty configuration, 
 you need to update the information with your credentials.
 
-```
+```json
 {
-    "ApiURL": "https://api.dnsimple.com/v1/domains/",
+    "ApiURL": "https://api.dnsimple.com/v1/",
     "Domain": "example.com",
     "Mail": "nobody@example.com",
     "Token": "your_token"
@@ -37,7 +37,7 @@ you need to update the information with your credentials.
 You can manage your records on a daily basis from the CLI, operations such as ```list, delete, create, update and get``` are fully supported. The first time you try to run it asks to configure your credentials. It will not work until you configure them.
 
 #### Records
-```
+```bash
 $ dnscli records list
 Type         Name                     TTL       RecordID     Content
 A            .example.com             3600      5163024      2.3.4.5
