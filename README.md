@@ -34,7 +34,7 @@ you need to update the information with your credentials.
 
 ### Getting started
 
-You can manage your records on a daily basis from the CLI, operations such as ```list, delete, create, update and get``` are fully supported. The first time you try to run it asks to configure your credentials. It will not work until you configure them.
+You can manage your records on a daily basis from the CLI, operations such as ```list, delete, create, update and get``` are fully supported. Do not forget to provide your credentials.
 
 #### Records
 ```bash
@@ -59,12 +59,23 @@ You can provide a different domain from the CLI.
 
 ```$ dnscli -d example2.com records  list```
 
+##### Add record
+Adding a new record is pretty easy. Let's say you want to add ```demo.example.com```, below
+is the command. If you do not specify a name (-n), you are adding the ```.example```.
+
+
+```bash
+$ dnscli records add -t A -c 192.243.125.30  -n demo
+Type                 Name                   TTL                   RecordID              Content
+A                    demo.example.com       3600                  3122300               192.243.125.30 
+```
+
 For operations such as ```delete, get or update``` you need to provide the **RecordID** as an option.
 
 #### Auto renewal
 
 Auto renewal can be enabled/disabled:
-```
+```bash
 $ dnscli  autorenewal  -e
 Domain                Lockable              AutoRenew
 example.com             true                  true
@@ -79,8 +90,6 @@ PROG=dnscli source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_auto
 ```
 
 #### TODO
-I just wanted something that works, some improvements :
 
-- Move ```records``` and ```autorenewal``` to packages so if somebody wants to use it as a library may integrate it 
- on their apps.
+- Move ```records``` and ```autorenewal``` to packages
 - Better testing
