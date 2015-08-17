@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -87,9 +88,17 @@ func getRecordDomain(domain, id string) {
 	defer response.Body.Close()
 
 	dataResponse := make(map[string]Record)
+	dataBytes, _ := ioutil.ReadAll(response.Body)
+
+	// If I want to process after decoding, I need
+	// a copy of response.Body.
+	response.Body = ioutil.NopCloser(bytes.NewBuffer(dataBytes))
 	err = json.NewDecoder(response.Body).Decode(&dataResponse)
 	if err != nil {
-		log.Fatal("getRecordDomain-Decode: ", err)
+		dataResponse := make(map[string]string)
+		json.Unmarshal(dataBytes, &dataResponse)
+		fmt.Println(dataResponse["message"])
+		return
 	}
 	stdoutHeader()
 	stdoutRecord(dataResponse["record"])
